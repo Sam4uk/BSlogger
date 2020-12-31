@@ -14,37 +14,70 @@
 #include <chrono>
 
 #define LOG_SILENT 0
-#define LOG_ERR 1
-#define LOG_ERROR 1
-#define LOG_WARN 2
-#define LOG_WARNING 2
-#define LOG_INFO 3
-#define LOG_TIME 4
-#define LOG_DEBUG 5
-#define LOG_DEFAULT 4
+#define LOG_EMERGENCY 0
+#define LOG_ALERT 1
+#define LOG_CRITICAL 2
+#define LOG_ERROR 3
+// #define LOG_ERR 3
+#define LOG_WARNING 4
+#define LOG_WARN 4
+#define LOG_NOTICE 5
+#define LOG_TIME 5
+#define LOG_INFORMATIONAL 6
+// #define LOG_INFO 6
+#define LOG_DEBUG 7
+#define LOG_DEFAULT 5
 
 #define LOG_INIT_COUT() logger log(std::cout, __PRETTY_FUNCTION__)
 #define LOG_INIT_CERR() logger log(std::cerr, __PRETTY_FUNCTION__)
 #define LOG_INIT_CLOG() logger log(std::clog, __PRETTY_FUNCTION__)
 #define LOG_INIT_CUSTOM(X) logger log( (X), __PRETTY_FUNCTION__)
 
+#define BSLOG_MES_EMERGENCY     "[ EMERGENCY ]"
+#define BSLOG_MES_ALERT         "[   ALERT   ]"
+#define BSLOG_MES_CRITICAL      "[  CRITICAL ]"
+#define BSLOG_MES_ERROR         "[   ERROR   ]"
+#define BSLOG_MES_WARNING       "[  WARNING  ]"
+#define BSLOG_MES_NOTICE        "[   NOTICE  ]"
+#define BSLOG_MES_INFO          "[    INFO   ]"
+#define BSLOG_MES_DEBUG         "[   DEBUG   ]"
+
 #ifdef BSLOG_NO_COLORS
 
-#define BSLOG_TIME    "[ TIME    ]"
-#define BSLOG_DEBUG   "[ DEBUG   ]"
-#define BSLOG_ERROR   "[ ERROR   ]"
-#define BSLOG_WARNING "[ WARNING ]"
-#define BSLOG_INFO    "[ INFO    ]"
-
+#define BSLOG_COLOR_EMERGENCY
+#define BSLOG_COLOR_ALERT    
+#define BSLOG_COLOR_CRITICAL 
+#define BSLOG_COLOR_ERROR    
+#define BSLOG_COLOR_WARNING  
+#define BSLOG_COLOR_NOTICE   
+#define BSLOG_COLOR_INFO     
+#define BSLOG_COLOR_DEBUG    
+#define BSLOG_COLOR_RESET  "\033[0;0m"
+    
 #else
 
-#define BSLOG_TIME    "\033[0;35m[ TIME    ]\033[0;0m"
-#define BSLOG_DEBUG   "[ DEBUG   ]"
-#define BSLOG_ERROR   "\033[0;31m[ ERROR   ]\033[0;0m"
-#define BSLOG_WARNING "\033[0;33m[ WARNING ]\033[0;0m"
-#define BSLOG_INFO    "\033[0;34m[ INFO    ]\033[0;0m"
+#define BSLOG_COLOR_EMERGENCY "\033[1;41m"
+#define BSLOG_COLOR_ALERT    "\033[30;1;43m"
+#define BSLOG_COLOR_CRITICAL "\033[31;1;47m"
+#define BSLOG_COLOR_ERROR   "\033[0;31m" 
+#define BSLOG_COLOR_WARNING  "\033[0;33m"
+#define BSLOG_COLOR_NOTICE "\033[0;35m"
+#define BSLOG_COLOR_INFO   "\033[0;34m"  
+#define BSLOG_COLOR_DEBUG   "\033[32m" 
+#define BSLOG_COLOR_RESET "\033[0;0m"   
 
 #endif
+
+#define BSLOG_EMERGENCY BSLOG_COLOR_EMERGENCY BSLOG_MES_EMERGENCY BSLOG_COLOR_RESET  
+#define BSLOG_ALERT     BSLOG_COLOR_ALERT     BSLOG_MES_ALERT     BSLOG_COLOR_RESET       
+#define BSLOG_CRITICAL  BSLOG_COLOR_CRITICAL  BSLOG_MES_CRITICAL  BSLOG_COLOR_RESET   
+#define BSLOG_ERROR     BSLOG_COLOR_ERROR     BSLOG_MES_ERROR     BSLOG_COLOR_RESET       
+#define BSLOG_WARNING   BSLOG_COLOR_WARNING   BSLOG_MES_WARNING   BSLOG_COLOR_RESET    
+#define BSLOG_NOTICE    BSLOG_COLOR_NOTICE    BSLOG_MES_NOTICE    BSLOG_COLOR_RESET    
+#define BSLOG_INFO      BSLOG_COLOR_INFO      BSLOG_MES_INFO      BSLOG_COLOR_RESET       
+#define BSLOG_DEBUG     BSLOG_COLOR_DEBUG     BSLOG_MES_DEBUG     BSLOG_COLOR_RESET  
+
+#define BSLOG_TIME BSLOG_NOTICE
 
 template <typename T>
 std::string format_duration( T xms ) {
@@ -167,16 +200,22 @@ std::string prep_level(logger& l)
 {
   switch (l._message_level)
   {
-  case LOG_ERR:
+  case LOG_EMERGENCY:
+    return BSLOG_EMERGENCY; break;
+  case LOG_ALERT:
+    return BSLOG_ALERT; break;
+  case LOG_CRITICAL:
+    return BSLOG_CRITICAL; break;
+  case LOG_ERROR:
     return BSLOG_ERROR; break;
-  case LOG_WARN:
+  case LOG_WARNING:
     return BSLOG_WARNING; break;
-  case LOG_INFO:
+  case LOG_NOTICE:
+    return BSLOG_NOTICE; break;
+  case LOG_INFORMATIONAL:
     return BSLOG_INFO; break;
   case LOG_DEBUG:
     return BSLOG_DEBUG; break;
-  case LOG_TIME:
-    return BSLOG_TIME; break;
   default:
     return "";
   }
