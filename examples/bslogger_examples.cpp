@@ -1,11 +1,10 @@
+#include <chrono>  //milliseconds
+#include <fstream>
+#include <thread>  //sleep_for
+
 #include "../src/BSlogger.hpp"
 
-#include <chrono> //milliseconds
-#include <thread> //sleep_for
-
-int main(int argc, char ** argv)
-{
-
+int main(int argc, char** argv) {
   // Initiate logger (default name is 'log')
   LOG_INIT_CERR();
 
@@ -14,8 +13,12 @@ int main(int argc, char ** argv)
   // so the debug info is not displayed
   log(LOG_DEBUG) << "Some text\n";
   log(LOG_INFO) << "Some text\n";
-  log(LOG_WARN) << "Some text\n";
+  log(LOG_NOTICE) << "Some text\n";
+  log(LOG_WARNING) << "Some text\n";
   log(LOG_ERR) << "Some text\n";
+  log(LOG_CRIT) << "Some text\n";
+  log(LOG_ALERT) << "Some text\n";
+  log(LOG_EMERG) << "Some text\n";
 
   // Change the log level
   log.set_log_level(LOG_DEBUG);
@@ -25,10 +28,9 @@ int main(int argc, char ** argv)
 
   // Everything that has a operator<< method
   // for ostreams can be logged
-  float x = 3.1415;
+  double x = 3.1415;
 
-  log(LOG_DEBUG) << "The value of x is " << x
-                 << ", the address is " << &x
+  log(LOG_DEBUG) << "The value of x is " << x << ", the address is " << &x
                  << '\n';
 
   progbar_fancy<uint64_t> p(std::cout, 999999999);
